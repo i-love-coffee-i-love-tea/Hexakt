@@ -15,18 +15,18 @@ Copy the class, use one of the methods to dump the input data in hex. It has no 
 
 Input can either come from
 
-	- byte[]
-	- FileInputStream
-	- InputStream 
+- byte[]
+- FileInputStream
+- InputStream 
  
 Output can go to
 
-	- Custom PrintStream
-	- System.out
-	- A logger that you like. You just need to insert
-		- the logger import(s)
-		- a line for getting a logger
-		- the logger usage in `HexUtil.printf`
+- Custom PrintStream
+- System.out
+- A logger that you like. You just need to insert
+  - the logger import(s)
+  - a line for getting a logger
+  - the logger usage in `HexUtil.printf`
 
 ### at the console (not its main purpose, but also possible)
 
