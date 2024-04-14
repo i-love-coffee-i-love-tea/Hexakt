@@ -2,8 +2,29 @@
 
 Creates output exactly formatted as util-linux's `hexdump -C`
 
-It has helped me during development of filesystem tools, a network packet logger and binary format
-parsers.
+
+## Motivation
+
+Over the years I have needed a hexdump util in java multiple times. It has helped me during development of filesystem tools, a network packet logger and binary format
+parsers. After more than 10 years I had a lot of different versions of this class, because 
+
+- I used it in different environments
+  - Without logger
+  - with slf4j
+  - with direct logger usage
+- I had different requirements for input and output
+  - file
+  - stream
+  - array
+
+To be done with this mess I generalized the class to hopefully have all required input/output combinations
+and with a printf method, so you have only one place to change to use a different logger or printing method.
+
+## Goals
+
+- procudes diffable output (with util-linux hexdump -C)
+- no dependencies
+- drop it into your project, at most choose your logger and be done, without having to change code in multiple places
 
 
 ## Usage 
