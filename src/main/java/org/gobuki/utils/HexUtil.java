@@ -87,7 +87,7 @@ public class HexUtil {
 
     public static void printHex(InputStream inputStream, int indentSpaces, long streamLength, OutputFormat outputFormat, PrintStream out) {
         String byteFormat = "%02x ";
-        int bytesAccumulated = 0;
+        int lineBytesAccumulated = 0;
         int address = 0;
         int totalBytesProcessed = 0;
         int totalLines = 0;
@@ -101,32 +101,30 @@ public class HexUtil {
             indent = "";
         }
 
-        int bufferSize = 32768;
-        byte[] readBuffer;
+        byte[] readBuffer = new byte[32768];
+        int bytesRead;
 
         try {
-            while ((readBuffer = inputStream.readNBytes(bufferSize)).length > 0 ) {
+            while ((bytesRead = inputStream.read(readBuffer)) != -1) {
                 for (byte b : readBuffer) {
                     // hex representation
                     hexRepresentation.append(String.format(byteFormat, b));
-
                     // output space after each 8 bytes
                     if (outputFormat == OutputFormat.LINUX_HEXDUMP && hexRepresentation.length() == 8 * 3) {
                         hexRepresentation.append(" ");
                     }
-
                     // ascii representation if printable
                     if (b > 31 && b < 127) {
                         asciiRepresentation.append((char) b);
                     } else {
                         asciiRepresentation.append(".");
                     }
-
-                    bytesAccumulated++;
+                    lineBytesAccumulated++;
                     totalBytesProcessed++;
+
                     // print the line if we accumulated enough characters or we are at the last byte
                     // reset line context variables
-                    if ((bytesAccumulated == BYTES_PER_LINE) || totalBytesProcessed == streamLength) {
+                    if ((lineBytesAccumulated == BYTES_PER_LINE) || totalBytesProcessed == streamLength) {
                         if (outputFormat == OutputFormat.SHORT) {
                             printf(out,"%s%6s %-48s%s%n", indent, address, hexRepresentation, asciiRepresentation);
                         } else {
@@ -135,9 +133,12 @@ public class HexUtil {
                         hexRepresentation.delete(0, hexRepresentation.length());
                         asciiRepresentation.delete(0, asciiRepresentation.length());
 
-                        address += bytesAccumulated;
-                        bytesAccumulated = 0;
+                        address += lineBytesAccumulated;
+                        lineBytesAccumulated = 0;
                         totalLines++;
+                    }
+                    if (totalBytesProcessed == bytesRead) {
+                        break;
                     }
                 }
             }
@@ -148,7 +149,7 @@ public class HexUtil {
                 } else {
                     printf(out,"%s%08x  %-49s |%s|%n", indent, address, hexRepresentation, asciiRepresentation);
                 }
-                address += bytesAccumulated;
+                address += lineBytesAccumulated;
             }
 
             if (outputFormat != OutputFormat.LINUX_HEXDUMP) {
