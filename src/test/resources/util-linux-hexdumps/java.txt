@@ -1,0 +1,2 @@
+Java: Write once, run away.
+
