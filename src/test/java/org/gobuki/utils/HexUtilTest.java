@@ -1,7 +1,6 @@
 package org.gobuki.utils;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.nio.file.Paths;
 
 class HexUtilTest {
 
@@ -29,8 +25,8 @@ class HexUtilTest {
     @Test
     void printHex_formats_byte_array_exactly_like_util_linux_hexdump() throws IOException {
 
-        byte[] data = Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/bar.txt"));
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/bar.txt.hexdump")));
+        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/bar.txt"));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/bar.txt.hexdump")));
 
         HexUtil.printHex(data);
 
@@ -39,8 +35,9 @@ class HexUtilTest {
 
     @Test
     void printHex_applies_indentSpaces_correctly() throws IOException {
-        byte[] data = Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/fat.txt"));
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/fat.txt.hexdump")));
+
+        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/fat.txt"));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/fat.txt.hexdump")));
 
         HexUtil.printHex(data, 4);
 
@@ -53,8 +50,8 @@ class HexUtilTest {
 
     @Test
     void printHex_applies_indentSpaces_correctly_when_used_with_output_PrintStream() throws IOException {
-        byte[] data = Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/fat.txt"));
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/fat.txt.hexdump")));
+        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/fat.txt"));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/fat.txt.hexdump")));
 
         HexUtil.printHex(data, 4, System.out);
 
@@ -69,8 +66,8 @@ class HexUtilTest {
 
     @Test
     void printHex_with_custom_printstream() throws IOException {
-        byte[] data = Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/bar.txt"));
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/bar.txt.hexdump")));
+        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/bar.txt"));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/bar.txt.hexdump")));
 
         HexUtil.printHex(data, System.out);
 
@@ -79,7 +76,7 @@ class HexUtilTest {
 
     @Test
     void printHex_with_FileInputStream() throws IOException {
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
 
         HexUtil.printHex(new FileInputStream("src/test/resources/util-linux-hexdumps/java.txt"));
 
@@ -88,8 +85,8 @@ class HexUtilTest {
 
     @Test
     void printHex_with_ByteArrayInputStream_should_print_to_stdout() throws IOException {
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/regular.txt.hexdump")));
-        byte[] data = Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/regular.txt"));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/regular.txt.hexdump")));
+        byte[] data = Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/regular.txt"));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
 
         HexUtil.printHex(inputStream, 0, data.length, HexUtil.OutputFormat.LINUX_HEXDUMP, System.out);
@@ -106,18 +103,18 @@ class HexUtilTest {
     }
 
     @Test
-    void formatAs2ByteTuples() {
+    void formatAsByteTuples() {
         byte[] data = "could be a certificate or ssh key fingerprint".getBytes();
-        String formatted = HexUtil.formatAs2ByteTuples(data);
+        String formatted = HexUtil.formatAsByteTuples(data);
         String expected = "63:6F:75:6C:64:20:62:65:20:61:20:63:65:72:74:69:66:69:63:61:74:65:20:6F:72:20:73:73:68:20:6B:65:79:20:66:69:6E:67:65:72:70:72:69:6E:74";
         Assertions.assertEquals(expected, formatted);
     }
 
     @Test
     void main_called_with_stdin() throws IOException {
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
 
-        provideInput(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/java.txt")));
+        provideInput(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/java.txt")));
         HexUtil.main(new String[]{});
 
         Assertions.assertEquals(linuxUtilsHexdump, outputStreamCaptor.toString().trim());
@@ -125,7 +122,7 @@ class HexUtilTest {
 
     @Test
     void main_called_with_existing_filename_as_argument_OK() throws IOException {
-        String linuxUtilsHexdump = new String(Files.readAllBytes(Path.of("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
+        String linuxUtilsHexdump = new String(Files.readAllBytes(Paths.get("src/test/resources/util-linux-hexdumps/java.txt.hexdump")));
 
         HexUtil.main(new String[]{"src/test/resources/util-linux-hexdumps/java.txt"});
 

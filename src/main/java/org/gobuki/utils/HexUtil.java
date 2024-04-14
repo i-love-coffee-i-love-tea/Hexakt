@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -86,7 +86,7 @@ public class HexUtil {
     }
 
     public static void printHex(InputStream inputStream, int indentSpaces, long streamLength, OutputFormat outputFormat, PrintStream out) {
-        String twoByteTupleFormat = "%02x ";
+        String byteFormat = "%02x ";
         int bytesAccumulated = 0;
         int address = 0;
         int totalBytesProcessed = 0;
@@ -108,7 +108,7 @@ public class HexUtil {
             while ((readBuffer = inputStream.readNBytes(bufferSize)).length > 0 ) {
                 for (byte b : readBuffer) {
                     // hex representation
-                    hexRepresentation.append(String.format(twoByteTupleFormat, b));
+                    hexRepresentation.append(String.format(byteFormat, b));
 
                     // output space after each 8 bytes
                     if (outputFormat == OutputFormat.LINUX_HEXDUMP && hexRepresentation.length() == 8 * 3) {
@@ -142,7 +142,7 @@ public class HexUtil {
                 }
             }
             // required to dump last line when the stream length is unknown, when used with stdin
-            if (!hexRepresentation.isEmpty()) {
+            if (hexRepresentation.length() > 0) {
                 if (outputFormat == OutputFormat.SHORT) {
                     printf(out,"%s%6s %-48s%s%n", indent, address, hexRepresentation, asciiRepresentation);
                 } else {
@@ -176,7 +176,7 @@ public class HexUtil {
      * @param data
      * @return
      */
-    public static String formatAs2ByteTuples(byte[] data) {
+    public static String formatAsByteTuples(byte[] data) {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < data.length ; i++) {
             if (i == data.length - 1) {
@@ -218,7 +218,7 @@ public class HexUtil {
             HexUtil.printHex(System.in, 0, Long.MAX_VALUE, OutputFormat.LINUX_HEXDUMP, System.out);
         } else if (args.length > 0 && args[0] != null) {
             try {
-                HexUtil.printHex(Files.readAllBytes(Path.of(args[0])));
+                HexUtil.printHex(Files.readAllBytes(Paths.get(args[0])));
             } catch (Exception e) {
                 System.err.printf("Failed to read file: {}%n", args[0]);
             }
