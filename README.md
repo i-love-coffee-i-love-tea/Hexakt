@@ -3,8 +3,7 @@
 
 # Hex dump utility written in java
 
-Creates output exactly formatted as util-linux's `hexdump -C`
-
+Creates output exactly formatted as **util-linux's `hexdump -C`**
 
 ## Motivation
 
@@ -31,7 +30,6 @@ and with a printf method, so you have only one place to change to use a differen
 
 
 ## Usage 
-
 
 ### In java code
 
