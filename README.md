@@ -1,4 +1,4 @@
-[![Tests](https://github.com/i-love-coffee-i-love-tea/Hexakt/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/i-love-coffee-i-love-tea/Hexakt/actions/workflows/maven.yml)
+[![Tests](https://github.com/i-love-coffee-i-love-tea/Hexakt/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/i-love-coffee-i-love-tea/Hexakt/actions/workflows/maven.yml)
 
 
 # Hex dump utility written in java
